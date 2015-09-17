@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <script src= "http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+  <body>
+
+    <div ng-app="pandaExApp" ng-controller="pandaExCtrl">
+      Currtnt status: {{status}}<br>
+      <br>
+      Availability:<br>
+      <br>
+      <ul id="messages">
+        <li ng-repeat="message in messages">
+          &emsp;{{message.created_on}} - {{messages[$index-1].created_on || "&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;Now"}}: {{message.status}}: {{message.body}}
+        </li>
+      </ul>
+
+    </div>
+
+    <script>
+      var app = angular.module('pandaExApp', []);
+      app.controller('pandaExCtrl', function($scope, $http) {
+        $http.get("http://localhost:8080/status")
+          .success(function(response) {
+            $scope.status = response.status;
+          })
+          .error(function(error) {
+            console.log("Error: " + error);
+          });
+
+        $http.get("http://localhost:8080/messages")
+          .success(function(response) {
+            $scope.messages = response;
+          })
+          .error(function(error) {
+            console.log("Error: " + error);
+          });
+      });
+    </script>
+
+  </body>
+</html>
